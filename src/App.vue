@@ -4,14 +4,17 @@ export default {
     return {
       text: "Hello",
       tableData: [
-        // Пример данных
+        //  пример данных
         {
           address: "123 Main St",
           company: "Acme Inc.",
           basicInfo: "Lorem ipsum",
         },
-        // Добавьте больше объектов с данными сюда
       ],
+      tabHeader: {
+        expandedIcon: "pi pi-chevron-circle-down",
+        collapsedIcon: "pi pi-chevron-circle-up",
+      },
     };
   },
 };
@@ -24,35 +27,35 @@ export default {
     </header>
     <div class="line"></div>
     <div class="content">
-      <!-- <div class="table"> -->
       <div class="content__types">
-        <div class="content-type content-split"></div>
+        <div class="empty"></div>
         <div class="content-type content-split">Name</div>
         <div class="content-type content-split">Email</div>
         <div class="content-type content-split">Phone</div>
         <div class="content-type content-split">Website</div>
       </div>
-      <div class="content__data"></div>
-      <div>
-        <!-- :activeIndex="[0]"-->
-        <Accordion :multiple="true">
-          <!-- первый аккордион -->
-          <AccordionTab>
-            <template v-slot:header>
-              <div class="content-split">NameI</div>
-              <div class="content-split">EmailI</div>
-              <div class="content-split">PhoneI</div>
-              <div class="content-split">WebsiteI</div>
-            </template>
-            <!-- <table> -->
-            <!-- <div class="form2"> -->
-            <div class="table2">
+      <!-- :activeIndex="[0]"-->
+      <Accordion :multiple="true">
+        <!-- первый аккордион -->
+        <AccordionTab
+          :expanded-icon="tabHeader.expandedIcon"
+          :collapsed-icon="tabHeader.collapsedIcon"
+        >
+          <template v-slot:header>
+            <div class="content-split">NameI</div>
+            <div class="content-split">EmailI</div>
+            <div class="content-split">PhoneI</div>
+            <div class="content-split">WebsiteI</div>
+          </template>
+          <div class="typesSave">
+            <!--внутри него addresscompanybasic + button-->
+            <div class="table">
               <div class="row">
                 <div class="addressCell cell">Address</div>
                 <div class="companyCell cell">Company</div>
                 <div class="basicinfoCell cell">Basic Info</div>
-                <div class="buttonCell cell" @click="SaveChanges">SAVE</div>
               </div>
+
               <!-- <div
                   class="row"
                   v-for="(item, index) in tableData"
@@ -64,17 +67,19 @@ export default {
                 </div> -->
               <div class="row">
                 <div class="firstCell cell">
-                  <div>
+                  <div class="streetInput">
                     <div class="street">Street</div>
                     <input type="text" />
                   </div>
-                  <div>
+                  <div class="suiteInput">
                     <div class="suite">Suite</div>
                     <input type="text" />
                   </div>
-                  <div class="city">City</div>
-                  <input type="text" />
-                  <div>
+                  <div class="cityInput">
+                    <div class="city">City</div>
+                    <input type="text" />
+                  </div>
+                  <div class="zipcodeInput">
                     <div class="zipcode">Zipcode</div>
                     <input type="text" />
                   </div>
@@ -112,35 +117,35 @@ export default {
                   </div>
                 </div>
               </div>
-              <!-- </div> -->
             </div>
-            <!-- </table> -->
-          </AccordionTab>
+            <div class="buttonCell2">Button</div>
+            <!-- </div> -->
+          </div>
+          <!-- </table> -->
+        </AccordionTab>
 
-          <!-- второй аккордион -->
-          <AccordionTab>
-            <template v-slot:header>
-              <!-- <div class="content-split"></div> -->
-              <div class="content-split">NameII</div>
-              <div class="content-split">EmailII</div>
-              <div class="content-split">PhoneII</div>
-              <div class="content-split">WebsiteII</div>
-            </template>
-            <table></table>
-          </AccordionTab>
-          <!-- третий аккордион -->
-          <AccordionTab>
-            <template v-slot:header>
-              <div class="content-split">NameIII</div>
-              <div class="content-split">EmailIII</div>
-              <div class="content-split">PhoneIII</div>
-              <div class="content-split">WebsiteIII</div>
-            </template>
-            <table></table>
-          </AccordionTab>
-        </Accordion>
-      </div>
-      <!-- </div> -->
+        <!-- второй аккордион -->
+        <AccordionTab>
+          <template v-slot:header>
+            <!-- <div class="content-split"></div> -->
+            <div class="content-split">NameII</div>
+            <div class="content-split">EmailII</div>
+            <div class="content-split">PhoneII</div>
+            <div class="content-split">WebsiteII</div>
+          </template>
+          <table></table>
+        </AccordionTab>
+        <!-- третий аккордион -->
+        <AccordionTab>
+          <template v-slot:header>
+            <div class="content-split">NameIII</div>
+            <div class="content-split">EmailIII</div>
+            <div class="content-split">PhoneIII</div>
+            <div class="content-split">WebsiteIII</div>
+          </template>
+          <table></table>
+        </AccordionTab>
+      </Accordion>
     </div>
   </div>
 </template>
@@ -167,16 +172,19 @@ export default {
     margin-left: 51px;
   }
 }
-// Accordion {
-//   margin-bottom: 100px;
-//   margin-top: 100px;
-//   // также не работает
-// }
+.p-accordion-toggle-icon {
+  // margin-left: 12px;
+  // margin-right: 20px;
+  color: #ffd300;
+  width: 4%;
+}
 
 .p-accordion-tab {
+  width: 100%;
   margin-bottom: 11px;
   border-bottom: 1px solid yellow;
   padding-bottom: 10px;
+  border-radius: 4px;
   // не работает
 }
 
@@ -190,17 +198,16 @@ export default {
   // просто чтобы понятно было
   width: 100%;
   max-width: 1626px;
-  // margin-top: 107px;
   margin-top: 30px;
-  // почему-то margin-top считается от линии
   margin-left: 60px;
   margin-right: 64px;
+
   &__types {
     outline: 1px solid #000;
     // для удобства
     display: flex;
     flex-direction: row;
-    padding: 10px 15px;
+    padding-bottom: 10px;
     margin-bottom: 10px;
 
     .content-type {
@@ -209,50 +216,77 @@ export default {
     }
   }
 
+  .empty {
+    width: 4%;
+  }
   .content-split {
-    &:first-child {
-      width: 3.15%;
-    }
+    // &:first-child {
+    //   width: 4%;
+    // }
     &:nth-child(2) {
-      width: 20.99%;
+      width: 20%;
     }
     &:nth-child(3) {
-      width: 23.79%;
+      width: 24%;
     }
     &:nth-child(4) {
-      width: 27%;
+      width: 28%;
     }
     &:nth-child(5) {
-      width: 25.055%;
+      width: 24%;
     }
   }
 }
 
-.table2 {
+.table {
   display: table;
   width: 100%;
+  // box-sizing: border-box;
   padding-right: 31.31px;
+  padding-top: 12px;
+  padding-left: 32px;
 }
+.typesSave {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  // flex-wrap: wrap;
+  // justify-content:
+  border: 1px solid;
+}
+
 .row {
   display: table-row;
 }
+
 .cell {
   display: table-cell;
-  // padding: 8px; /* Измените отступы по вашему вкусу */
-  border: 1px solid #ccc; /* Границы для ячеек */
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 .firstCell {
   padding-left: 32.31px;
   padding-bottom: 93px;
   padding-top: 18px;
 }
+.streetInput {
+  padding-bottom: 12px;
+}
+.suiteInput {
+  padding-bottom: 12px;
+}
+.cityInput {
+  padding-bottom: 12px;
+}
+.zipcodeInput {
+  padding-bottom: 12px;
+}
 .street {
   padding-top: 7px;
 }
 .secondCell {
   padding-left: 31.27px;
-  // padding-top: 50px;
-  //
 }
 .thirdCell {
   padding-left: 31.27px;
@@ -283,25 +317,16 @@ export default {
   padding-top: 11px;
   border: 1px solid #ccc;
 }
-.buttonCell {
-  display: table-cell;
-  width: 61.46px;
-  // или block сделать
-  padding-left: 19.77px;
-  // padding: 0 10px;
-  // padding-left: 10px;
-  // так и не смог сделать так, чтобы
-  // padding-right: 0px;
+
+.buttonCell2 {
   border: 1px solid blue;
-  font-size: 12px;
-  font-weight: bolder;
-  // width: 5%;
+  height: 40px;
+  margin-top: 12px;
+  margin-right: 32px;
 }
 .form2 {
   margin-left: 31.27px;
   margin-top: 12px;
   margin-right: 31.31px;
-  // outline: 1px solid #000;
-  // обводит form2
 }
 </style>
