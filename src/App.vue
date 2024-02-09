@@ -196,8 +196,8 @@ export default {
 .content {
   outline: 1px solid #000;
   // просто чтобы понятно было
-  width: 100%;
-  max-width: 1626px;
+  width: 92.91%;
+  // max-width: 1626px;
   margin-top: 30px;
   margin-left: 60px;
   margin-right: 64px;
