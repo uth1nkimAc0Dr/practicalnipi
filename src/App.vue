@@ -69,21 +69,22 @@ export default {
                 <div class="firstCell cell">
                   <div class="streetInput">
                     <div class="street">Street</div>
-                    <input type="text" />
+                    <input type="text" class="input" />
                   </div>
                   <div class="suiteInput">
                     <div class="suite">Suite</div>
-                    <input type="text" />
+                    <input type="text" class="input" />
                   </div>
                   <div class="cityInput">
                     <div class="city">City</div>
-                    <input type="text" />
+                    <input type="text" class="input" />
                   </div>
                   <div class="zipcodeInput">
                     <div class="zipcode">Zipcode</div>
-                    <input type="text" />
+                    <input type="text" class="input" />
                   </div>
                 </div>
+
                 <div class="secondCell cell">
                   <div>
                     <div class="">Name</div>
@@ -93,9 +94,12 @@ export default {
                     <div class="">Catchphrase</div>
                     <input type="text" />
                   </div>
-                  <div class="">Bs</div>
-                  <input type="text" />
+                  <div>
+                    <div class="">Bs</div>
+                    <input type="text" />
+                  </div>
                 </div>
+
                 <div class="thirdCell cell">
                   <div>
                     <div class="">Name</div>
@@ -105,8 +109,10 @@ export default {
                     <div class="">Username</div>
                     <input type="text" />
                   </div>
-                  <div class="">Email</div>
-                  <input type="text" />
+                  <div>
+                    <div class="">Email</div>
+                    <input type="text" />
+                  </div>
                   <div>
                     <div class="">Phone</div>
                     <input type="text" />
@@ -119,9 +125,7 @@ export default {
               </div>
             </div>
             <div class="buttonCell2">Button</div>
-            <!-- </div> -->
           </div>
-          <!-- </table> -->
         </AccordionTab>
 
         <!-- второй аккордион -->
@@ -135,6 +139,7 @@ export default {
           </template>
           <table></table>
         </AccordionTab>
+
         <!-- третий аккордион -->
         <AccordionTab>
           <template v-slot:header>
@@ -159,12 +164,10 @@ export default {
   width: 100%;
   max-width: 1750px;
   outline: 1px solid #000;
-  // просто чтобы понятно было
 }
 
 .header {
   width: 100%;
-
   // =.header__user
   &__user {
     color: black;
@@ -173,19 +176,17 @@ export default {
   }
 }
 .p-accordion-toggle-icon {
-  // margin-left: 12px;
-  // margin-right: 20px;
   color: #ffd300;
   width: 4%;
 }
 
 .p-accordion-tab {
   width: 100%;
-  margin-bottom: 11px;
-  border-bottom: 1px solid yellow;
-  padding-bottom: 10px;
+  outline: 1px solid #ffd200;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  margin-bottom: 10px;
   border-radius: 4px;
-  // не работает
 }
 
 .line {
@@ -194,8 +195,7 @@ export default {
 }
 
 .content {
-  outline: 1px solid #000;
-  // просто чтобы понятно было
+  // outline: 1px solid #000;
   width: 92.91%;
   // max-width: 1626px;
   margin-top: 30px;
@@ -203,8 +203,7 @@ export default {
   margin-right: 64px;
 
   &__types {
-    outline: 1px solid #000;
-    // для удобства
+    // outline: 1px solid #000;
     display: flex;
     flex-direction: row;
     padding-bottom: 10px;
@@ -220,9 +219,6 @@ export default {
     width: 4%;
   }
   .content-split {
-    // &:first-child {
-    //   width: 4%;
-    // }
     &:nth-child(2) {
       width: 20%;
     }
@@ -241,7 +237,6 @@ export default {
 .table {
   display: table;
   width: 100%;
-  // box-sizing: border-box;
   padding-right: 31.31px;
   padding-top: 12px;
   padding-left: 32px;
@@ -251,9 +246,7 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: row;
-  // flex-wrap: wrap;
-  // justify-content:
-  border: 1px solid;
+  // border: 1px solid;
 }
 
 .row {
@@ -266,12 +259,27 @@ export default {
   box-sizing: border-box;
 }
 .firstCell {
-  padding-left: 32.31px;
-  padding-bottom: 93px;
-  padding-top: 18px;
+  // padding-bottom: 93px;
 }
-.streetInput {
-  padding-bottom: 12px;
+
+.firstCell > *,
+.secondCell > *,
+.thirdCell > * {
+  margin-bottom: 12px;
+}
+.firstCell,
+.secondCell,
+.thirdCell {
+  padding-top: 24px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.input {
+  width: 432px;
+  height: 36px;
+  border-radius: 4px;
+  border: 1px solid #d9dbda;
 }
 .suiteInput {
   padding-bottom: 12px;
@@ -286,13 +294,10 @@ export default {
   padding-top: 7px;
 }
 .secondCell {
-  padding-left: 31.27px;
 }
 .thirdCell {
-  padding-left: 31.27px;
-  margin-right: 92.73px;
-  //
 }
+
 .addressCell {
   display: table-cell;
   width: 501px;
