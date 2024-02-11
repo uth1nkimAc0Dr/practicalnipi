@@ -86,15 +86,15 @@ export default {
                 </div>
 
                 <div class="secondCell cell">
-                  <div>
+                  <div class="companyNameInput">
                     <div class="">Name</div>
                     <input type="text" />
                   </div>
-                  <div>
-                    <div class="">Catchphrase</div>
+                  <div class="CatchPhraseInput">
+                    <div class="">CatchPhrase</div>
                     <input type="text" />
                   </div>
-                  <div>
+                  <div class="BsInput">
                     <div class="">Bs</div>
                     <input type="text" />
                   </div>
@@ -124,7 +124,10 @@ export default {
                 </div>
               </div>
             </div>
-            <div class="buttonCell2">Button</div>
+            <div class="buttonCell2">
+              <!-- <div class="check"> -->
+              <i class="pi pi-check" style="color: slateblue"></i>
+            </div>
           </div>
         </AccordionTab>
 
@@ -253,13 +256,26 @@ export default {
   display: table-row;
 }
 
+.check {
+  outline: 1px solid blue;
+}
 .cell {
   display: table-cell;
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
 .firstCell {
-  // padding-bottom: 93px;
+  padding-bottom: 69px;
+  padding-left: 24px;
+  padding-right: 32px;
+}
+.secondCell {
+  padding-left: 32px;
+  padding-right: 32px;
+}
+.thirdCell {
+  padding-left: 32px;
+  padding-right: 24px;
 }
 
 .firstCell > *,
@@ -271,12 +287,11 @@ export default {
 .secondCell,
 .thirdCell {
   padding-top: 24px;
-  padding-left: 24px;
-  padding-right: 24px;
 }
 
-.input {
-  width: 432px;
+input {
+  // width: 432px;
+  width: 100%;
   height: 36px;
   border-radius: 4px;
   border: 1px solid #d9dbda;
@@ -292,10 +307,6 @@ export default {
 }
 .street {
   padding-top: 7px;
-}
-.secondCell {
-}
-.thirdCell {
 }
 
 .addressCell {
@@ -325,6 +336,7 @@ export default {
 
 .buttonCell2 {
   border: 1px solid blue;
+  width: 40px;
   height: 40px;
   margin-top: 12px;
   margin-right: 32px;
