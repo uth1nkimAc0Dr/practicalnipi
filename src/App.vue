@@ -15,7 +15,20 @@ export default {
         expandedIcon: "pi pi-chevron-circle-down",
         collapsedIcon: "pi pi-chevron-circle-up",
       },
+      users: [],
     };
+  },
+  methods: {
+    fetchUserData() {
+      fetch("https://jsonplaceholder.typicode.com/users")
+        .then((response) => response.json())
+        .then((data) => {
+          this.users = data;
+        });
+    },
+  },
+  created() {
+    this.fetchUserData();
   },
 };
 </script>
@@ -40,12 +53,14 @@ export default {
         <AccordionTab
           :expanded-icon="tabHeader.expandedIcon"
           :collapsed-icon="tabHeader.collapsedIcon"
+          v-for="user in users"
+          :key="user.id"
         >
           <template v-slot:header>
-            <div class="content-split">NameI</div>
-            <div class="content-split">EmailI</div>
-            <div class="content-split">PhoneI</div>
-            <div class="content-split">WebsiteI</div>
+            <div class="content-split">{{ user.name }}</div>
+            <div class="content-split">{{ user.email }}</div>
+            <div class="content-split">{{ user.phone }}</div>
+            <div class="content-split">{{ user.website }}</div>
           </template>
           <div class="typesSave">
             <!--внутри него addresscompanybasic + button-->
@@ -126,7 +141,10 @@ export default {
             </div>
             <div class="buttonCell2">
               <!-- <div class="check"> -->
-              <i class="pi pi-check" style="color: slateblue"></i>
+              <i
+                class="pi pi-check"
+                style="color: slateblue; font-size: 2.5rem"
+              ></i>
             </div>
           </div>
         </AccordionTab>
