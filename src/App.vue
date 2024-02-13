@@ -3,14 +3,18 @@ export default {
   data() {
     return {
       text: "Hello",
-      tableData: [
-        //  пример данных
-        {
-          address: "123 Main St",
-          company: "Acme Inc.",
-          basicInfo: "Lorem ipsum",
-        },
+      updatesData: [
+        //  будем хранить измененные данные
       ],
+      /** обновленные данные должны попасть двумя элементами(type,value) в массив
+       * объект:
+       * id=2 + массив(street+value, number+value)
+       * id=5+массив(companyName+value, city+value)
+       * change при написании слова дохуя раз запушит
+       * Когда нажимаю на отправить,оно должно сравнивать каждый инпут со старыми данными
+       * Сравнение со старыми данными - будет dataChanges(мнохокода), список измененных данных
+       * onChanges не нужен
+       */
       tabHeader: {
         expandedIcon: "pi pi-chevron-circle-down",
         collapsedIcon: "pi pi-chevron-circle-up",
@@ -26,6 +30,24 @@ export default {
           this.users = data;
         });
     },
+    // dataChanges(type, value) {
+    //   this.updatesData.push([type, value]);
+    //   /**
+    //    * когда мы написали уже , мы нажали на баттон
+    //    * при нажатии на баттон происхоидт сравнение старого инпута с новым, если
+    //    * совпадает со старым, то игнор, а измененные: данный его тайп и валью пушим в массив
+    //    * и идем дальше, а потом в нижнем функции формируем список этих инпутов
+    //    */
+    // },
+    showUpdates() {
+      //   /**
+      //   отображает в alert список измененных input'ов из массива updatesData
+      //   через цикл фор по длине массива
+
+      alert(
+        "Надо сделать так, чтобы при нажатии на этот баттон, выводились изменения данного АккордионТаба"
+      );
+    },
   },
   created() {
     this.fetchUserData();
@@ -35,7 +57,7 @@ export default {
 
 <template>
   <div class="container">
-    <header>
+    <header class="header">
       <h3 class="header__user">USERS</h3>
     </header>
     <div class="line"></div>
@@ -57,6 +79,7 @@ export default {
           :key="user.id"
         >
           <template v-slot:header>
+            <!-- должны ли данные здесь изменяться? -->
             <div class="content-split">{{ user.name }}</div>
             <div class="content-split">{{ user.email }}</div>
             <div class="content-split">{{ user.phone }}</div>
@@ -71,70 +94,79 @@ export default {
                 <div class="basicinfoCell cell">Basic Info</div>
               </div>
 
-              <!-- <div
-                  class="row"
-                  v-for="(item, index) in tableData"
-                  :key="index"
-                >
-                  <div class="cell">{{ item.address }}</div>
-                  <div class="cell">{{ item.company }}</div>
-                  <div class="cell">{{ item.basicInfo }}</div>
-                </div> -->
               <div class="row">
                 <div class="firstCell cell">
                   <div class="streetInput">
                     <div class="street">Street</div>
-                    <input type="text" class="input" />
+                    <input
+                      type="text"
+                      v-model="user.address.street"
+                      class="input"
+                    />
+                    <!-- @change="dataChanges()" -->
+                    <!-- прокинуть в тайп действующий тайп и значение -->
                   </div>
                   <div class="suiteInput">
                     <div class="suite">Suite</div>
-                    <input type="text" class="input" />
+                    <input
+                      type="text"
+                      class="input"
+                      v-model="user.address.suite"
+                    />
                   </div>
                   <div class="cityInput">
                     <div class="city">City</div>
-                    <input type="text" class="input" />
+                    <input
+                      type="text"
+                      class="input"
+                      v-model="user.address.city"
+                    />
                   </div>
                   <div class="zipcodeInput">
                     <div class="zipcode">Zipcode</div>
-                    <input type="text" class="input" />
+                    <input
+                      type="text"
+                      class="input"
+                      v-model="user.address.zipcode"
+                    />
                   </div>
                 </div>
 
                 <div class="secondCell cell">
                   <div class="companyNameInput">
                     <div class="">Name</div>
-                    <input type="text" />
+                    <input type="text" v-model="user.company.name" />
                   </div>
                   <div class="CatchPhraseInput">
                     <div class="">CatchPhrase</div>
-                    <input type="text" />
+                    <input type="text" v-model="user.company.catchPhrase" />
                   </div>
                   <div class="BsInput">
                     <div class="">Bs</div>
-                    <input type="text" />
+                    <input type="text" v-model="user.company.bs" />
                   </div>
                 </div>
 
                 <div class="thirdCell cell">
                   <div>
                     <div class="">Name</div>
-                    <input type="text" />
+                    <input type="text" v-model="user.name" />
                   </div>
                   <div>
                     <div class="">Username</div>
-                    <input type="text" />
+                    <input type="text" v-model="user.username" />
                   </div>
                   <div>
                     <div class="">Email</div>
-                    <input type="text" />
+                    <input type="text" v-model="user.email" />
                   </div>
                   <div>
                     <div class="">Phone</div>
-                    <input type="text" />
+                    <input type="text" v-model="user.phone" />
                   </div>
                   <div>
                     <div class="">Website</div>
-                    <input type="text" />
+                    <input type="text" v-model="user.website" />
                   </div>
                 </div>
               </div>
@@ -144,6 +176,7 @@ export default {
               <i
                 class="pi pi-check"
                 style="color: slateblue; font-size: 2.5rem"
+                @click="showUpdates"
               ></i>
             </div>
           </div>
@@ -181,10 +214,18 @@ export default {
   margin: 0;
   padding: 0;
 }
+
+body {
+  // font-family: задать шрифты
+
+  // display: flex;
+  // justify-content: center;
+}
 .container {
   width: 100%;
   max-width: 1750px;
   outline: 1px solid #000;
+  padding-bottom: 10px;
 }
 
 .header {
@@ -220,8 +261,9 @@ export default {
   width: 92.91%;
   // max-width: 1626px;
   margin-top: 30px;
-  margin-left: 60px;
   margin-right: 64px;
+  // margin-bottom: 10px;
+  margin-left: 60px;
 
   &__types {
     // outline: 1px solid #000;
