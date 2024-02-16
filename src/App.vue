@@ -64,6 +64,7 @@ export default {
     <div class="content">
       <div class="content__types">
         <div class="empty"></div>
+        <!-- названия в массив и сделать цикл -->
         <div class="content-type content-split">Name</div>
         <div class="content-type content-split">Email</div>
         <div class="content-type content-split">Phone</div>
@@ -79,7 +80,8 @@ export default {
           :key="user.id"
         >
           <template v-slot:header>
-            <!-- должны ли данные здесь изменяться? -->
+            <!-- заполнение динамическим по возможности -->
+            <!-- должны ли данные здесь изменяться? - да! -->
             <div class="content-split">{{ user.name }}</div>
             <div class="content-split">{{ user.email }}</div>
             <div class="content-split">{{ user.phone }}</div>
@@ -88,14 +90,16 @@ export default {
           <div class="typesSave">
             <!--внутри него addresscompanybasic + button-->
             <div class="table">
-              <div class="row">
-                <div class="addressCell cell">Address</div>
-                <div class="companyCell cell">Company</div>
-                <div class="basicinfoCell cell">Basic Info</div>
+              <!-- не могу задать для верхнего левого -->
+              <div class="rowUp">
+                <div class="addressCell cell">ADDRESS</div>
+                <div class="companyCell cell">COMPANY</div>
+                <div class="basicinfoCell cell">BASIC INFO</div>
               </div>
 
-              <div class="row">
+              <div class="rowDown">
                 <div class="firstCell cell">
+                  <!-- завести еще один класс:359  -->
                   <div class="streetInput">
                     <div class="street">Street</div>
                     <input
@@ -134,38 +138,38 @@ export default {
 
                 <div class="secondCell cell">
                   <div class="companyNameInput">
-                    <div class="">Name</div>
+                    <div class="companyName">Name</div>
                     <input type="text" v-model="user.company.name" />
                   </div>
                   <div class="CatchPhraseInput">
-                    <div class="">CatchPhrase</div>
+                    <div class="catchPhrase">CatchPhrase</div>
                     <input type="text" v-model="user.company.catchPhrase" />
                   </div>
                   <div class="BsInput">
-                    <div class="">Bs</div>
+                    <div class="Bs">Bs</div>
                     <input type="text" v-model="user.company.bs" />
                   </div>
                 </div>
 
                 <div class="thirdCell cell">
                   <div>
-                    <div class="">Name</div>
+                    <div class="name">Name</div>
                     <input type="text" v-model="user.name" />
                   </div>
                   <div>
-                    <div class="">Username</div>
+                    <div class="username">Username</div>
                     <input type="text" v-model="user.username" />
                   </div>
                   <div>
-                    <div class="">Email</div>
+                    <div class="email">Email</div>
                     <input type="text" v-model="user.email" />
                   </div>
                   <div>
-                    <div class="">Phone</div>
+                    <div class="phone">Phone</div>
                     <input type="text" v-model="user.phone" />
                   </div>
                   <div>
-                    <div class="">Website</div>
+                    <div class="website">Website</div>
                     <input type="text" v-model="user.website" />
                   </div>
                 </div>
@@ -175,34 +179,12 @@ export default {
               <!-- <div class="check"> -->
               <i
                 class="pi pi-check"
-                style="color: slateblue; font-size: 2.5rem"
+                style="color: slateblue"
                 @click="showUpdates"
               ></i>
+              <!-- данные сохраняются только на той форме, к которой принадлежит кнопка -->
             </div>
           </div>
-        </AccordionTab>
-
-        <!-- второй аккордион -->
-        <AccordionTab>
-          <template v-slot:header>
-            <!-- <div class="content-split"></div> -->
-            <div class="content-split">NameII</div>
-            <div class="content-split">EmailII</div>
-            <div class="content-split">PhoneII</div>
-            <div class="content-split">WebsiteII</div>
-          </template>
-          <table></table>
-        </AccordionTab>
-
-        <!-- третий аккордион -->
-        <AccordionTab>
-          <template v-slot:header>
-            <div class="content-split">NameIII</div>
-            <div class="content-split">EmailIII</div>
-            <div class="content-split">PhoneIII</div>
-            <div class="content-split">WebsiteIII</div>
-          </template>
-          <table></table>
         </AccordionTab>
       </Accordion>
     </div>
@@ -216,15 +198,13 @@ export default {
 }
 
 body {
-  // font-family: задать шрифты
-
-  // display: flex;
-  // justify-content: center;
+  font-family: "Roboto";
 }
+
 .container {
+  margin: auto;
   width: 100%;
   max-width: 1750px;
-  outline: 1px solid #000;
   padding-bottom: 10px;
 }
 
@@ -235,11 +215,14 @@ body {
     color: black;
     margin-top: 24px;
     margin-left: 51px;
+    font-weight: 500;
+    font-size: 20px;
   }
 }
 .p-accordion-toggle-icon {
   color: #ffd300;
   width: 4%;
+  height: 20px;
 }
 
 .p-accordion-tab {
@@ -262,25 +245,12 @@ body {
   // max-width: 1626px;
   margin-top: 30px;
   margin-right: 64px;
-  // margin-bottom: 10px;
   margin-left: 60px;
-
-  &__types {
-    // outline: 1px solid #000;
-    display: flex;
-    flex-direction: row;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-
-    .content-type {
-      color: black;
-      size: 12px;
-    }
-  }
-
+  // types: name, email, phone, website - weight: 400 & size: 12px
   .empty {
     width: 4%;
   }
+  // чтобы content-split сначала применился, а потом content-type
   .content-split {
     &:nth-child(2) {
       width: 20%;
@@ -294,15 +264,33 @@ body {
     &:nth-child(5) {
       width: 24%;
     }
+    font-weight: 400;
+    font-size: 14px;
+  }
+
+  &__types {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+
+    .content-type {
+      color: #696969;
+      font-size: 12px;
+      font-weight: 400;
+      // line-height:14px
+    }
   }
 }
 
 .table {
   display: table;
   width: 100%;
-  padding-right: 31.31px;
+  padding-right: 20px;
   padding-top: 12px;
-  padding-left: 32px;
+  // padding-left: 32px;
+  margin-left: 64px;
+  border-radius: 4px;
+  border: 1px solid black;
 }
 .typesSave {
   box-sizing: border-box;
@@ -312,8 +300,15 @@ body {
   // border: 1px solid;
 }
 
-.row {
+.rowUp,
+.rowDown {
   display: table-row;
+}
+.rowUp {
+  border-top-left-radius: 10px;
+  border: 1px solid black;
+}
+.rowDown {
 }
 
 .check {
@@ -336,6 +331,7 @@ body {
 .thirdCell {
   padding-left: 32px;
   padding-right: 24px;
+  padding-bottom: 24px;
 }
 
 .firstCell > *,
@@ -343,67 +339,78 @@ body {
 .thirdCell > * {
   margin-bottom: 12px;
 }
+
 .firstCell,
 .secondCell,
 .thirdCell {
   padding-top: 24px;
 }
+// создать еще один класс вместо этого
+
+.street,
+.suite,
+.city,
+.zipcode,
+.companyName,
+.catchPhrase,
+.Bs,
+.name,
+.username,
+.email,
+.phone,
+.website {
+  font-weight: 400;
+  font-size: 12px;
+}
+// Дополнительный класс вместо такого написания
 
 input {
   // width: 432px;
+  padding-left: 18px;
   width: 100%;
   height: 36px;
   border-radius: 4px;
   border: 1px solid #d9dbda;
-}
-.suiteInput {
-  padding-bottom: 12px;
-}
-.cityInput {
-  padding-bottom: 12px;
-}
-.zipcodeInput {
-  padding-bottom: 12px;
-}
-.street {
-  padding-top: 7px;
+  font-weight: 400;
+  font-size: 14px;
+  margin-top: 7px;
 }
 
-.addressCell {
-  display: table-cell;
-  width: 501px;
-  padding-left: 32.31px;
-  padding-bottom: 10px;
-  padding-top: 11px;
-  border: 1px solid #ccc;
-}
-.companyCell {
-  display: table-cell;
-  width: 501px;
-  // padding-bottom: 10px;
-  padding-left: 30.23px;
-  padding-top: 11px;
-  border: 1px solid #ccc;
-}
+.addressCell,
+.companyCell,
 .basicinfoCell {
   display: table-cell;
   width: 501px;
-  padding-left: 31.27px;
-  padding-bottom: 10px;
   padding-top: 11px;
-  border: 1px solid #ccc;
+  // border: 1px solid #ccc;
+  font-size: 16px;
+  font-weight: 400;
+  padding-bottom: 10px;
+  padding-left: 32px;
 }
 
 .buttonCell2 {
-  border: 1px solid blue;
-  width: 40px;
+  width: 42px;
   height: 40px;
   margin-top: 12px;
   margin-right: 32px;
+  border-radius: 4px;
+  background-color: #ffd300;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
 }
+.pi-check:before {
+  height: 25px;
+  font-weight: 900;
+  text-align: center;
+  font-size: 25px;
+  color: #5f7465;
+}
+
 .form2 {
-  margin-left: 31.27px;
+  margin-left: 32px;
   margin-top: 12px;
-  margin-right: 31.31px;
+  margin-right: 32px;
 }
 </style>
