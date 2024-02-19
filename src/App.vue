@@ -64,14 +64,20 @@ export default {
     <div class="content">
       <div class="content__types">
         <div class="empty"></div>
-        <!-- названия в массив и сделать цикл -->
-        <div class="content-type content-split">Name</div>
+        <!-- <div class="content-type content-split">Name</div>
         <div class="content-type content-split">Email</div>
         <div class="content-type content-split">Phone</div>
-        <div class="content-type content-split">Website</div>
+        <div class="content-type content-split">Website</div> -->
+        <div
+          v-for="key in ['Name', 'Email', 'Phone', 'Website']"
+          :key="key"
+          class="content-type content-split"
+        >
+          {{ key }}
+        </div>
       </div>
-      <!-- :activeIndex="[0]"-->
-      <Accordion :multiple="true">
+      <!-- -->
+      <Accordion :multiple="true" :activeIndex="[0]">
         <!-- первый аккордион -->
         <AccordionTab
           :expanded-icon="tabHeader.expandedIcon"
@@ -80,18 +86,25 @@ export default {
           :key="user.id"
         >
           <template v-slot:header>
-            <!-- заполнение динамическим по возможности -->
-            <!-- должны ли данные здесь изменяться? - да! -->
-            <div class="content-split">{{ user.name }}</div>
-            <div class="content-split">{{ user.email }}</div>
-            <div class="content-split">{{ user.phone }}</div>
-            <div class="content-split">{{ user.website }}</div>
+            <div
+              v-for="key in ['name', 'email', 'phone', 'website']"
+              :key="key"
+              class="content-split"
+            >
+              <div>
+                {{ user[key] }}
+              </div>
+            </div>
+            <!-- <div class="content-split">{{ user.name }}</div> -->
+            <!-- <div class="content-split">{{ user.email }}</div> -->
+            <!-- <div class="content-split">{{ user.phone }}</div> -->
+            <!-- <div class="content-split">{{ user.website }}</div> -->
           </template>
           <div class="typesSave">
-            <!--внутри него addresscompanybasic + button-->
             <div class="table">
               <!-- не могу задать для верхнего левого -->
               <div class="rowUp">
+                <!-- через тире такое задавать, внизу тоже -->
                 <div class="addressCell cell">ADDRESS</div>
                 <div class="companyCell cell">COMPANY</div>
                 <div class="basicinfoCell cell">BASIC INFO</div>
@@ -107,6 +120,7 @@ export default {
                       v-model="user.address.street"
                       class="input"
                     />
+                    <!-- @input="changeINput(event)" -->
                     <!-- @change="dataChanges()" -->
                     <!-- прокинуть в тайп действующий тайп и значение -->
                   </div>
@@ -225,13 +239,27 @@ body {
   height: 20px;
 }
 
+// .p-accordion-header-link {
+// }
+
 .p-accordion-tab {
-  width: 100%;
-  outline: 1px solid #ffd200;
   padding-bottom: 12px;
   padding-top: 12px;
+  // height: 40px;
+  width: 100%;
+  outline: 1px solid #ffd200;
+  //
+  padding-bottom: 12px;
+  padding-top: 12px;
+  //
   margin-bottom: 10px;
   border-radius: 4px;
+}
+.p-highlight {
+  // padding-bottom: 12px;
+  // padding-top: 12px;
+}
+.p-accordion-header {
 }
 
 .line {
@@ -285,19 +313,40 @@ body {
 .table {
   display: table;
   width: 100%;
-  padding-right: 20px;
-  padding-top: 12px;
+  // padding-right: 20px;
+  // margin-top: 12px;
   // padding-left: 32px;
-  margin-left: 64px;
-  border-radius: 4px;
-  border: 1px solid black;
+  // margin-left: 32px;
+  border-radius: 10px;
+  // border: 1px solid black;
 }
 .typesSave {
+  padding-top: 12px;
+  padding-bottom: 8px;
+  padding-left: 32px;
+  padding-right: 32px;
+  // margin: 0 auto;
+
+  // padding-left: 32px;
+  // padding-right: 32px;
+  // margin-top: 12px;
+  // margin-left: 32px;
   box-sizing: border-box;
-  width: 100%;
+  // width: 100%;
+  // width: 98%;
   display: flex;
   flex-direction: row;
+
   // border: 1px solid;
+}
+.addressCell {
+  border-top-left-radius: 4px;
+}
+.p-accordion-header-link {
+  height: 16px !important;
+}
+.p-icon {
+  padding-right: 20px;
 }
 
 .rowUp,
@@ -305,8 +354,8 @@ body {
   display: table-row;
 }
 .rowUp {
-  border-top-left-radius: 10px;
-  border: 1px solid black;
+  // border-top-left-radius: 10px;
+  // border: 1px solid black;
 }
 .rowDown {
 }
@@ -320,6 +369,7 @@ body {
   box-sizing: border-box;
 }
 .firstCell {
+  border-bottom-left-radius: 4px;
   padding-bottom: 69px;
   padding-left: 24px;
   padding-right: 32px;
@@ -332,6 +382,7 @@ body {
   padding-left: 32px;
   padding-right: 24px;
   padding-bottom: 24px;
+  border-bottom-right-radius: 4px;
 }
 
 .firstCell > *,
@@ -376,6 +427,14 @@ input {
   margin-top: 7px;
 }
 
+.cell {
+  &:last-child {
+  }
+
+  &:first-child {
+  }
+}
+// для сокращенной записи
 .addressCell,
 .companyCell,
 .basicinfoCell {
@@ -388,12 +447,14 @@ input {
   padding-bottom: 10px;
   padding-left: 32px;
 }
+.basicinfoCell {
+  border-top-right-radius: 4px;
+}
 
 .buttonCell2 {
   width: 42px;
   height: 40px;
-  margin-top: 12px;
-  margin-right: 32px;
+  margin-left: 32px;
   border-radius: 4px;
   background-color: #ffd300;
   display: flex;
@@ -406,11 +467,5 @@ input {
   text-align: center;
   font-size: 25px;
   color: #5f7465;
-}
-
-.form2 {
-  margin-left: 32px;
-  margin-top: 12px;
-  margin-right: 32px;
 }
 </style>
