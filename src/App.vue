@@ -20,8 +20,25 @@ export default {
         collapsedIcon: "pi pi-chevron-circle-up",
       },
       users: [],
+      //
+      data: [
+        { label: "Name", value: this.user.name },
+        { label: "Username", value: this.user.username },
+        { label: "Email", value: this.user.email },
+        { label: "Phone", value: this.user.phone },
+        { label: "Website", value: this.user.website },
+      ],
+      //
     };
   },
+  //
+  props: {
+    user: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  //
   methods: {
     fetchUserData() {
       fetch("https://jsonplaceholder.typicode.com/users")
@@ -43,7 +60,6 @@ export default {
       //   /**
       //   отображает в alert список измененных input'ов из массива updatesData
       //   через цикл фор по длине массива
-
       alert(
         "Надо сделать так, чтобы при нажатии на этот баттон, выводились изменения данного АккордионТаба"
       );
@@ -64,10 +80,6 @@ export default {
     <div class="content">
       <div class="content__types">
         <div class="empty"></div>
-        <!-- <div class="content-type content-split">Name</div>
-        <div class="content-type content-split">Email</div>
-        <div class="content-type content-split">Phone</div>
-        <div class="content-type content-split">Website</div> -->
         <div
           v-for="key in ['Name', 'Email', 'Phone', 'Website']"
           :key="key"
@@ -76,8 +88,7 @@ export default {
           {{ key }}
         </div>
       </div>
-      <!-- -->
-      <Accordion :multiple="true" :activeIndex="[0]">
+      <Accordion :multiple="true">
         <!-- первый аккордион -->
         <AccordionTab
           :expanded-icon="tabHeader.expandedIcon"
@@ -95,102 +106,86 @@ export default {
                 {{ user[key] }}
               </div>
             </div>
-            <!-- <div class="content-split">{{ user.name }}</div> -->
-            <!-- <div class="content-split">{{ user.email }}</div> -->
-            <!-- <div class="content-split">{{ user.phone }}</div> -->
-            <!-- <div class="content-split">{{ user.website }}</div> -->
           </template>
           <div class="typesSave">
             <div class="table">
-              <!-- не могу задать для верхнего левого -->
-              <div class="rowUp">
+              <div class="row-up">
                 <!-- через тире такое задавать, внизу тоже -->
-                <div class="addressCell cell">ADDRESS</div>
-                <div class="companyCell cell">COMPANY</div>
-                <div class="basicinfoCell cell">BASIC INFO</div>
+                <div class="cell">ADDRESS</div>
+                <div class="cell">COMPANY</div>
+                <div class="cell">BASIC INFO</div>
               </div>
 
-              <div class="rowDown">
-                <div class="firstCell cell">
+              <div class="row-down">
+                <div class="first-cell cell">
                   <!-- завести еще один класс:359  -->
-                  <div class="streetInput">
-                    <div class="street">Street</div>
-                    <input
-                      type="text"
-                      v-model="user.address.street"
-                      class="input"
-                    />
+                  <div>
+                    <div class="custom-label">Street</div>
+                    <input type="text" v-model="user.address.street" />
                     <!-- @input="changeINput(event)" -->
                     <!-- @change="dataChanges()" -->
                     <!-- прокинуть в тайп действующий тайп и значение -->
                   </div>
-                  <div class="suiteInput">
-                    <div class="suite">Suite</div>
-                    <input
-                      type="text"
-                      class="input"
-                      v-model="user.address.suite"
-                    />
+                  <div>
+                    <div class="custom-label">Suite</div>
+                    <input type="text" v-model="user.address.suite" />
                   </div>
-                  <div class="cityInput">
-                    <div class="city">City</div>
-                    <input
-                      type="text"
-                      class="input"
-                      v-model="user.address.city"
-                    />
+                  <div>
+                    <div class="custom-label">City</div>
+                    <input type="text" v-model="user.address.city" />
                   </div>
-                  <div class="zipcodeInput">
-                    <div class="zipcode">Zipcode</div>
-                    <input
-                      type="text"
-                      class="input"
-                      v-model="user.address.zipcode"
-                    />
+                  <div>
+                    <div class="custom-label">Zipcode</div>
+                    <input type="text" v-model="user.address.zipcode" />
                   </div>
                 </div>
 
-                <div class="secondCell cell">
-                  <div class="companyNameInput">
-                    <div class="companyName">Name</div>
+                <div class="second-cell cell">
+                  <div>
+                    <div class="custom-label">Name</div>
                     <input type="text" v-model="user.company.name" />
                   </div>
-                  <div class="CatchPhraseInput">
-                    <div class="catchPhrase">CatchPhrase</div>
+                  <div>
+                    <div class="custom-label">CatchPhrase</div>
                     <input type="text" v-model="user.company.catchPhrase" />
                   </div>
-                  <div class="BsInput">
-                    <div class="Bs">Bs</div>
+                  <div>
+                    <div class="custom-label">Bs</div>
                     <input type="text" v-model="user.company.bs" />
                   </div>
                 </div>
 
-                <div class="thirdCell cell">
-                  <div>
-                    <div class="name">Name</div>
+                <div class="third-cell cell">
+                  <div v-for="(item, index) in data" :key="index">
+                    <div class="custom-label">{{ item.label }}</div>
+                    <input type="text" v-model="item.value" />
+                  </div>
+                </div>
+
+                <!-- <div>
+                    <div class="custom-label">Name</div>
                     <input type="text" v-model="user.name" />
                   </div>
                   <div>
-                    <div class="username">Username</div>
+                    <div class="custom-label">Username</div>
                     <input type="text" v-model="user.username" />
                   </div>
                   <div>
-                    <div class="email">Email</div>
+                    <div class="custom-label">Email</div>
                     <input type="text" v-model="user.email" />
                   </div>
                   <div>
-                    <div class="phone">Phone</div>
+                    <div class="custom-label">Phone</div>
                     <input type="text" v-model="user.phone" />
                   </div>
                   <div>
-                    <div class="website">Website</div>
+                    <div class="custom-label">Website</div>
                     <input type="text" v-model="user.website" />
-                  </div>
-                </div>
+                  </div> -->
+                <!-- </div> -->
               </div>
             </div>
-            <div class="buttonCell2">
-              <!-- <div class="check"> -->
+            <div class="button-cell">
               <i
                 class="pi pi-check"
                 style="color: slateblue"
@@ -227,8 +222,7 @@ body {
   // =.header__user
   &__user {
     color: black;
-    margin-top: 24px;
-    margin-left: 51px;
+    margin: 24px 0px 0px 51px;
     font-weight: 500;
     font-size: 20px;
   }
@@ -239,27 +233,12 @@ body {
   height: 20px;
 }
 
-// .p-accordion-header-link {
-// }
-
 .p-accordion-tab {
-  padding-bottom: 12px;
-  padding-top: 12px;
-  // height: 40px;
+  padding: 12px 0px;
   width: 100%;
   outline: 1px solid #ffd200;
-  //
-  padding-bottom: 12px;
-  padding-top: 12px;
-  //
   margin-bottom: 10px;
   border-radius: 4px;
-}
-.p-highlight {
-  // padding-bottom: 12px;
-  // padding-top: 12px;
-}
-.p-accordion-header {
 }
 
 .line {
@@ -268,17 +247,11 @@ body {
 }
 
 .content {
-  // outline: 1px solid #000;
   width: 92.91%;
-  // max-width: 1626px;
-  margin-top: 30px;
-  margin-right: 64px;
-  margin-left: 60px;
-  // types: name, email, phone, website - weight: 400 & size: 12px
+  margin: 30px 64px 0px 60px;
   .empty {
     width: 4%;
   }
-  // чтобы content-split сначала применился, а потом content-type
   .content-split {
     &:nth-child(2) {
       width: 20%;
@@ -305,7 +278,6 @@ body {
       color: #696969;
       font-size: 12px;
       font-weight: 400;
-      // line-height:14px
     }
   }
 }
@@ -313,145 +285,103 @@ body {
 .table {
   display: table;
   width: 100%;
-  // padding-right: 20px;
-  // margin-top: 12px;
-  // padding-left: 32px;
-  // margin-left: 32px;
   border-radius: 10px;
-  // border: 1px solid black;
 }
-.typesSave {
-  padding-top: 12px;
-  padding-bottom: 8px;
-  padding-left: 32px;
-  padding-right: 32px;
-  // margin: 0 auto;
 
-  // padding-left: 32px;
-  // padding-right: 32px;
-  // margin-top: 12px;
-  // margin-left: 32px;
+.typesSave {
+  padding: 12px 32px 8px 32px;
   box-sizing: border-box;
-  // width: 100%;
-  // width: 98%;
   display: flex;
   flex-direction: row;
+}
 
-  // border: 1px solid;
-}
-.addressCell {
-  border-top-left-radius: 4px;
-}
 .p-accordion-header-link {
   height: 16px !important;
 }
+
 .p-icon {
   padding-right: 20px;
 }
 
-.rowUp,
-.rowDown {
+.row-up,
+.row-down {
   display: table-row;
 }
-.rowUp {
-  // border-top-left-radius: 10px;
-  // border: 1px solid black;
-}
-.rowDown {
+
+.row-up {
 }
 
-.check {
-  outline: 1px solid blue;
+.row-down {
 }
+
 .cell {
   display: table-cell;
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
-.firstCell {
+
+.first-cell {
   border-bottom-left-radius: 4px;
-  padding-bottom: 69px;
-  padding-left: 24px;
-  padding-right: 32px;
+  padding: 0px 32px 69px 24px;
 }
-.secondCell {
-  padding-left: 32px;
-  padding-right: 32px;
+.second-cell {
+  padding: 0px 32px;
 }
-.thirdCell {
-  padding-left: 32px;
-  padding-right: 24px;
-  padding-bottom: 24px;
+.third-cell {
+  padding: 0px 24px 24px 32px;
   border-bottom-right-radius: 4px;
 }
 
-.firstCell > *,
-.secondCell > *,
-.thirdCell > * {
+.first-cell > *,
+.second-cell > *,
+.third-cell > * {
   margin-bottom: 12px;
 }
 
-.firstCell,
-.secondCell,
-.thirdCell {
+.first-cell,
+.second-cell,
+.third-cell {
   padding-top: 24px;
 }
 // создать еще один класс вместо этого
 
-.street,
-.suite,
-.city,
-.zipcode,
-.companyName,
-.catchPhrase,
-.Bs,
-.name,
-.username,
-.email,
-.phone,
-.website {
+.custom-label {
   font-weight: 400;
   font-size: 12px;
+  // margin-bottom: 12px;
 }
-// Дополнительный класс вместо такого написания
 
 input {
-  // width: 432px;
-  padding-left: 18px;
   width: 100%;
   height: 36px;
-  border-radius: 4px;
-  border: 1px solid #d9dbda;
   font-weight: 400;
   font-size: 14px;
+  border: 1px solid #d9dbda;
+  border-radius: 4px;
   margin-top: 7px;
+  padding-left: 18px;
 }
-
-.cell {
-  &:last-child {
-  }
-
-  &:first-child {
-  }
-}
-// для сокращенной записи
-.addressCell,
-.companyCell,
-.basicinfoCell {
+.row-up > * {
   display: table-cell;
   width: 501px;
   padding-top: 11px;
-  // border: 1px solid #ccc;
   font-size: 16px;
   font-weight: 400;
   padding-bottom: 10px;
   padding-left: 32px;
 }
-.basicinfoCell {
-  border-top-right-radius: 4px;
+// избавился от .address-cell, .company-cell, .basicinfo-cell
+.row-up {
+  &:first-child {
+    border-top-left-radius: 4px;
+  }
+
+  &:last-child {
+    border-top-right-radius: 4px;
+  }
 }
 
-.buttonCell2 {
+.button-cell {
   width: 42px;
   height: 40px;
   margin-left: 32px;
@@ -461,6 +391,7 @@ input {
   justify-content: center;
   padding-top: 8px;
 }
+
 .pi-check:before {
   height: 25px;
   font-weight: 900;
