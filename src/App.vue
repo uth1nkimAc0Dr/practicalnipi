@@ -3,9 +3,7 @@ export default {
   data() {
     return {
       text: "Hello",
-      updatesData: [
-        //  будем хранить измененные данные
-      ],
+
       /** обновленные данные должны попасть двумя элементами(type,value) в массив
        * объект:
        * id=2 + массив(street+value, number+value)
@@ -19,44 +17,50 @@ export default {
         expandedIcon: "pi pi-chevron-circle-down",
         collapsedIcon: "pi pi-chevron-circle-up",
       },
+      oldUsers: [],
       users: [],
-      //
-      data: [
-        { label: "Name", value: this.user.name },
-        { label: "Username", value: this.user.username },
-        { label: "Email", value: this.user.email },
-        { label: "Phone", value: this.user.phone },
-        { label: "Website", value: this.user.website },
+      updatesData: [
+        //  будем хранить измененные данные
       ],
-      //
     };
   },
-  //
-  props: {
-    user: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  //
   methods: {
     fetchUserData() {
       fetch("https://jsonplaceholder.typicode.com/users")
         .then((response) => response.json())
         .then((data) => {
           this.users = data;
+          this.oldUsers = JSON.parse(JSON.stringify(data));
         });
     },
     // dataChanges(type, value) {
-    //   this.updatesData.push([type, value]);
-    //   /**
-    //    * когда мы написали уже , мы нажали на баттон
-    //    * при нажатии на баттон происхоидт сравнение старого инпута с новым, если
-    //    * совпадает со старым, то игнор, а измененные: данный его тайп и валью пушим в массив
-    //    * и идем дальше, а потом в нижнем функции формируем список этих инпутов
-    //    */
-    // },
+    dataChanges(id, event, type) {
+      // const type = event.target.type; //type
+      const newValue = event.target.value; //newValue
+      alert(
+        "значение изменилось: type:" +
+          type +
+          ", value:" +
+          newValue +
+          ", id:" +
+          id
+      );
+      // можно добавить проверку: чтобы если там уже есть такой тайп, то оно будет заменяться новым значением
+      // можно добавить проверку с oldUsers, чтобы всегда проверяло на несовпадение со старыми данными
+      // а в идеале чтобы проверку делало и старое убирало сразу же
+      this.updatesData.push({ id, type, newValue });
+      // надо получить user.id + тип: user.address.suite + значение
+      // если данные изменились, то мы записываем их в updatesData
+      /**
+       * когда мы написали уже , мы нажали на баттон
+       * при нажатии на баттон происхоидт сравнение старого инпута с новым, если
+       * совпадает со старым, то игнор, а измененные: данный его тайп и валью пушим в массив
+       * и идем дальше, а потом в нижнем функции формируем список этих инпутов
+       */
+    },
     showUpdates() {
+      console.log(this.updatesData);
+      // alert(updatesData);
       //   /**
       //   отображает в alert список измененных input'ов из массива updatesData
       //   через цикл фор по длине массива
@@ -117,18 +121,30 @@ export default {
               </div>
 
               <div class="row-down">
-                <div class="first-cell cell">
+                <div class="first-cell cell-padding cell">
                   <!-- завести еще один класс:359  -->
                   <div>
                     <div class="custom-label">Street</div>
-                    <input type="text" v-model="user.address.street" />
+                    <input
+                      type="text"
+                      v-model="user.address.street"
+                      @change="
+                        dataChanges(user.id, $event, 'user.address.street')
+                      "
+                    />
                     <!-- @input="changeINput(event)" -->
                     <!-- @change="dataChanges()" -->
                     <!-- прокинуть в тайп действующий тайп и значение -->
                   </div>
                   <div>
                     <div class="custom-label">Suite</div>
-                    <input type="text" v-model="user.address.suite" />
+                    <input
+                      type="text"
+                      v-model="user.address.suite"
+                      @change="
+                        dataChanges(user.id, $event, 'user.address.suite')
+                      "
+                    />
                   </div>
                   <div>
                     <div class="custom-label">City</div>
@@ -140,7 +156,7 @@ export default {
                   </div>
                 </div>
 
-                <div class="second-cell cell">
+                <div class="second-cell cell-padding cell">
                   <div>
                     <div class="custom-label">Name</div>
                     <input type="text" v-model="user.company.name" />
@@ -155,14 +171,8 @@ export default {
                   </div>
                 </div>
 
-                <div class="third-cell cell">
-                  <div v-for="(item, index) in data" :key="index">
-                    <div class="custom-label">{{ item.label }}</div>
-                    <input type="text" v-model="item.value" />
-                  </div>
-                </div>
-
-                <!-- <div>
+                <div class="third-cell cell-padding cell">
+                  <div>
                     <div class="custom-label">Name</div>
                     <input type="text" v-model="user.name" />
                   </div>
@@ -181,15 +191,15 @@ export default {
                   <div>
                     <div class="custom-label">Website</div>
                     <input type="text" v-model="user.website" />
-                  </div> -->
-                <!-- </div> -->
+                  </div>
+                </div>
               </div>
             </div>
             <div class="button-cell">
               <i
                 class="pi pi-check"
                 style="color: slateblue"
-                @click="showUpdates"
+                @click="showUpdates(user.id)"
               ></i>
               <!-- данные сохраняются только на той форме, к которой принадлежит кнопка -->
             </div>
@@ -210,16 +220,8 @@ body {
   font-family: "Roboto";
 }
 
-.container {
-  margin: auto;
-  width: 100%;
-  max-width: 1750px;
-  padding-bottom: 10px;
-}
-
 .header {
   width: 100%;
-  // =.header__user
   &__user {
     color: black;
     margin: 24px 0px 0px 51px;
@@ -227,18 +229,12 @@ body {
     font-size: 20px;
   }
 }
-.p-accordion-toggle-icon {
-  color: #ffd300;
-  width: 4%;
-  height: 20px;
-}
 
-.p-accordion-tab {
-  padding: 12px 0px;
+.container {
+  margin: auto;
   width: 100%;
-  outline: 1px solid #ffd200;
-  margin-bottom: 10px;
-  border-radius: 4px;
+  max-width: 1750px;
+  padding-bottom: 10px;
 }
 
 .line {
@@ -282,10 +278,18 @@ body {
   }
 }
 
-.table {
-  display: table;
+.p-accordion-toggle-icon {
+  color: #ffd300;
+  width: 4%;
+  height: 20px;
+}
+
+.p-accordion-tab {
+  padding: 12px 0px;
   width: 100%;
-  border-radius: 10px;
+  outline: 1px solid #ffd200;
+  margin-bottom: 10px;
+  border-radius: 4px;
 }
 
 .typesSave {
@@ -293,6 +297,23 @@ body {
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
+}
+
+.table {
+  display: table;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.button-cell {
+  display: flex;
+  justify-content: center;
+  width: 42px;
+  height: 40px;
+  margin-left: 32px;
+  padding-top: 8px;
+  border-radius: 4px;
+  background-color: #ffd300;
 }
 
 .p-accordion-header-link {
@@ -303,15 +324,12 @@ body {
   padding-right: 20px;
 }
 
-.row-up,
-.row-down {
-  display: table-row;
-}
-
-.row-up {
-}
-
-.row-down {
+.pi-check:before {
+  height: 25px;
+  font-weight: 900;
+  text-align: center;
+  font-size: 25px;
+  color: #5f7465;
 }
 
 .cell {
@@ -322,7 +340,7 @@ body {
 
 .first-cell {
   border-bottom-left-radius: 4px;
-  padding: 0px 32px 69px 24px;
+  padding: 0px 32px 69px 32px;
 }
 .second-cell {
   padding: 0px 32px;
@@ -338,17 +356,13 @@ body {
   margin-bottom: 12px;
 }
 
-.first-cell,
-.second-cell,
-.third-cell {
+.cell-padding {
   padding-top: 24px;
 }
-// создать еще один класс вместо этого
 
 .custom-label {
   font-weight: 400;
   font-size: 12px;
-  // margin-bottom: 12px;
 }
 
 input {
@@ -361,6 +375,12 @@ input {
   margin-top: 7px;
   padding-left: 18px;
 }
+
+.row-up,
+.row-down {
+  display: table-row;
+}
+
 .row-up > * {
   display: table-cell;
   width: 501px;
@@ -369,8 +389,8 @@ input {
   font-weight: 400;
   padding-bottom: 10px;
   padding-left: 32px;
-}
-// избавился от .address-cell, .company-cell, .basicinfo-cell
+} //  избавился от .address-cell, .company-cell, .basicinfo-cell
+
 .row-up {
   &:first-child {
     border-top-left-radius: 4px;
@@ -379,24 +399,5 @@ input {
   &:last-child {
     border-top-right-radius: 4px;
   }
-}
-
-.button-cell {
-  width: 42px;
-  height: 40px;
-  margin-left: 32px;
-  border-radius: 4px;
-  background-color: #ffd300;
-  display: flex;
-  justify-content: center;
-  padding-top: 8px;
-}
-
-.pi-check:before {
-  height: 25px;
-  font-weight: 900;
-  text-align: center;
-  font-size: 25px;
-  color: #5f7465;
 }
 </style>
