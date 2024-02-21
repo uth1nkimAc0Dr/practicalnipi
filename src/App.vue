@@ -17,9 +17,9 @@ export default {
         expandedIcon: "pi pi-chevron-circle-down",
         collapsedIcon: "pi pi-chevron-circle-up",
       },
-      oldUsers: [],
+      oldUsersData: [],
       users: [],
-      updatesData: [
+      updatedUsersData: [
         //  будем хранить измененные данные
       ],
     };
@@ -30,43 +30,115 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.users = data;
-          this.oldUsers = JSON.parse(JSON.stringify(data));
+          this.oldUsersData = JSON.parse(JSON.stringify(data));
         });
     },
     // dataChanges(type, value) {
     dataChanges(id, event, type) {
-      // const type = event.target.type; //type
-      const newValue = event.target.value; //newValue
-      alert(
-        "значение изменилось: type:" +
-          type +
-          ", value:" +
-          newValue +
-          ", id:" +
-          id
+      const newValue = event.target.value;
+      // Найти индекс пользователя в массиве updatedUsersData
+      const userIndex = this.updatedUsersData.findIndex(
+        (user) => user.id === id
       );
-      // можно добавить проверку: чтобы если там уже есть такой тайп, то оно будет заменяться новым значением
-      // можно добавить проверку с oldUsers, чтобы всегда проверяло на несовпадение со старыми данными
-      // а в идеале чтобы проверку делало и старое убирало сразу же
-      this.updatesData.push({ id, type, newValue });
-      // надо получить user.id + тип: user.address.suite + значение
-      // если данные изменились, то мы записываем их в updatesData
-      /**
-       * когда мы написали уже , мы нажали на баттон
-       * при нажатии на баттон происхоидт сравнение старого инпута с новым, если
-       * совпадает со старым, то игнор, а измененные: данный его тайп и валью пушим в массив
-       * и идем дальше, а потом в нижнем функции формируем список этих инпутов
-       */
+
+      // Если пользователь с данным id уже существует в массиве, обновить его данные
+      if (userIndex !== -1) {
+        this.updatedUsersData[userIndex][type] = newValue;
+      } else {
+        // Если пользователя с данным id еще нет в массиве, добавить его
+        const userData = {
+          id: id,
+        };
+        userData[type] = newValue;
+        this.updatedUsersData.push(userData);
+      }
     },
-    showUpdates() {
-      console.log(this.updatesData);
+    // type is user.address.suite или user.address.city
+    // const newValue = event.target.value; //newValue
+    // alert(
+    //   "значение изменилось: type:" +
+    //     type +
+    //     ", value:" +
+    //     newValue +
+    //     ", id:" +
+    //     id
+    // );
+    // можно добавить проверку: чтобы если там уже есть такой тайп, то оно будет заменяться новым значением
+    // можно добавить проверку с oldUsers, чтобы всегда проверяло на несовпадение со старыми данными
+    // а в идеале чтобы проверку делало и старое убирало сразу же
+    // если newValue ===oldUsersData.type.value, то remove UpdatedUsersData.type
+    // если newValue !=== oldUsersData.type.value, то add UpdatedUsersData.type
+    // this.updatedUsersData.push({ id, type, newValue });
+    // [
+    //   {
+    //     id: 1,
+    //     type: "user.address.street",
+    //     newValue: "Новое значение для улицы",
+    //   },
+    //   {
+    //     id: 1,
+    //     type: "user.address.suite",
+    //     newValue: "Новое значение для квартиры",
+    //   },
+    // ];
+
+    // надо получить user.id + тип: user.address.suite + значение
+    // если данные изменились, то мы записываем их в updatesData
+    /**
+     * когда мы написали уже , мы нажали на баттон
+     * при нажатии на баттон происхоидт сравнение старого инпута с новым, если
+     * совпадает со старым, то игнор, а измененные: данный его тайп и валью пушим в массив
+     * и идем дальше, а потом в нижнем функции формируем список этих инпутов
+     */
+    // },
+
+    showUpdates(id) {
+      console.log("вывод всего в updatedUsersData");
+      for (let i = 0; i < this.updatedUsersData.length; i++) {
+        console.log("Object " + i + ":");
+        let obj = this.updatedUsersData[i];
+        for (let key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            console.log(key + ": " + obj[key]);
+          }
+        }
+      }
+      alert("Вывод данных для объекта с id " + id + ":");
+      for (let i = 0; i < this.updatedUsersData.length; i++) {
+        const obj = this.updatedUsersData[i];
+        // Проверяем, совпадает ли id объекта с id, который мы ищем
+        if (obj.id === id) {
+          for (let key in obj) {
+            if (obj.hasOwnProperty(key)) {
+              alert(key + ": " + obj[key]);
+            }
+          }
+          // Если мы нашли объект с нужным id, выходим из цикла
+          break;
+        }
+      }
+      //
+      // const foundUser = this.updatedUsersData.find(
+      //   (foundUser) => foundUser.id === id
+      // );
+      // console.log("foundUser is " + foundUser);
+      // //foundUser это тот объект с тайпами, который принадлежит этому аккордианТабу
+      // // console.log(this.updatedUsersData);
+      // let modalWindow = "";
+      // for (let key in foundUser) {
+      //   if (key !== "id") {
+      //     modalWindow += `${key}: ${foundUser[key]}\n`;
+      //   }
+      // }
+      // console.log("Такие данные были изменены:\n" + modalWindow);
+      //
       // alert(updatesData);
       //   /**
       //   отображает в alert список измененных input'ов из массива updatesData
       //   через цикл фор по длине массива
-      alert(
-        "Надо сделать так, чтобы при нажатии на этот баттон, выводились изменения данного АккордионТаба"
-      );
+      // alert(
+      //   "Надо сделать так, чтобы при нажатии на этот баттон, выводились изменения данного АккордионТаба"
+      // );
     },
   },
   created() {
@@ -122,7 +194,6 @@ export default {
 
               <div class="row-down">
                 <div class="first-cell cell-padding cell">
-                  <!-- завести еще один класс:359  -->
                   <div>
                     <div class="custom-label">Street</div>
                     <input
@@ -148,7 +219,13 @@ export default {
                   </div>
                   <div>
                     <div class="custom-label">City</div>
-                    <input type="text" v-model="user.address.city" />
+                    <input
+                      type="text"
+                      v-model="user.address.city"
+                      @change="
+                        dataChanges(user.id, $event, 'user.address.city')
+                      "
+                    />
                   </div>
                   <div>
                     <div class="custom-label">Zipcode</div>
@@ -299,6 +376,31 @@ body {
   flex-direction: row;
 }
 
+.row-up,
+.row-down {
+  display: table-row;
+}
+
+.row-up > * {
+  display: table-cell;
+  width: 501px;
+  padding-top: 11px;
+  font-size: 16px;
+  font-weight: 400;
+  padding-bottom: 10px;
+  padding-left: 32px;
+} //  избавился от .address-cell, .company-cell, .basicinfo-cell
+
+.row-up {
+  &:first-child {
+    border-top-left-radius: 4px;
+  }
+
+  &:last-child {
+    border-top-right-radius: 4px;
+  }
+}
+
 .table {
   display: table;
   width: 100%;
@@ -374,30 +476,5 @@ input {
   border-radius: 4px;
   margin-top: 7px;
   padding-left: 18px;
-}
-
-.row-up,
-.row-down {
-  display: table-row;
-}
-
-.row-up > * {
-  display: table-cell;
-  width: 501px;
-  padding-top: 11px;
-  font-size: 16px;
-  font-weight: 400;
-  padding-bottom: 10px;
-  padding-left: 32px;
-} //  избавился от .address-cell, .company-cell, .basicinfo-cell
-
-.row-up {
-  &:first-child {
-    border-top-left-radius: 4px;
-  }
-
-  &:last-child {
-    border-top-right-radius: 4px;
-  }
 }
 </style>
