@@ -33,67 +33,26 @@ export default {
           this.oldUsersData = JSON.parse(JSON.stringify(data));
         });
     },
-    // dataChanges(type, value) {
+
     dataChanges(id, event, type) {
       const newValue = event.target.value;
-      // Найти индекс пользователя в массиве updatedUsersData
+      //поиск нужного юзера в массиве updatedUsersData
       const userIndex = this.updatedUsersData.findIndex(
         (user) => user.id === id
       );
-
-      // Если пользователь с данным id уже существует в массиве, обновить его данные
       if (userIndex !== -1) {
+        // объект с таким айди есть
         this.updatedUsersData[userIndex][type] = newValue;
       } else {
-        // Если пользователя с данным id еще нет в массиве, добавить его
-        const userData = {
+        //создаем объект
+        const newUserData = {
           id: id,
         };
-        userData[type] = newValue;
-        this.updatedUsersData.push(userData);
+        newUserData[type] = newValue;
+        this.updatedUsersData.push(newUserData);
       }
     },
-    // type is user.address.suite или user.address.city
-    // const newValue = event.target.value; //newValue
-    // alert(
-    //   "значение изменилось: type:" +
-    //     type +
-    //     ", value:" +
-    //     newValue +
-    //     ", id:" +
-    //     id
-    // );
-    // можно добавить проверку: чтобы если там уже есть такой тайп, то оно будет заменяться новым значением
-    // можно добавить проверку с oldUsers, чтобы всегда проверяло на несовпадение со старыми данными
-    // а в идеале чтобы проверку делало и старое убирало сразу же
-    // если newValue ===oldUsersData.type.value, то remove UpdatedUsersData.type
-    // если newValue !=== oldUsersData.type.value, то add UpdatedUsersData.type
-    // this.updatedUsersData.push({ id, type, newValue });
-    // [
-    //   {
-    //     id: 1,
-    //     type: "user.address.street",
-    //     newValue: "Новое значение для улицы",
-    //   },
-    //   {
-    //     id: 1,
-    //     type: "user.address.suite",
-    //     newValue: "Новое значение для квартиры",
-    //   },
-    // ];
-
-    // надо получить user.id + тип: user.address.suite + значение
-    // если данные изменились, то мы записываем их в updatesData
-    /**
-     * когда мы написали уже , мы нажали на баттон
-     * при нажатии на баттон происхоидт сравнение старого инпута с новым, если
-     * совпадает со старым, то игнор, а измененные: данный его тайп и валью пушим в массив
-     * и идем дальше, а потом в нижнем функции формируем список этих инпутов
-     */
-    // },
-
     showUpdates(id) {
-      console.log("вывод всего в updatedUsersData");
       for (let i = 0; i < this.updatedUsersData.length; i++) {
         console.log("Object " + i + ":");
         let obj = this.updatedUsersData[i];
@@ -103,42 +62,70 @@ export default {
           }
         }
       }
-      alert("Вывод данных для объекта с id " + id + ":");
+      // нужно сделать проверку на отсутствие изменений.
+      // let modalWindow = "";
+      // for (let i = 0; i < this.updatedUsersData.length; i++) {
+      //   const userData = this.updatedUsersData[i];
+      //   // Проверяем, совпадает ли id объекта с id, который мы ищем
+      //   if (userData.id !== id) {
+      //     // прикол в том, что объект в принципе не будет существовать
+      //     console.log("empty");
+      //     // написать здесь нормальное условие на существование
+      //   } else if (userData.id === id) {
+      //     for (let key in userData) {
+      //       if (
+      //         userData.hasOwnProperty(key) &&
+      //         key !== "id" &&
+      //         (userData[key] === "" || userData[key] === " ")
+      //       ) {
+      //         modalWindow += `${key}: Вы очистили это поле\n`;
+      //       } else if (userData.hasOwnProperty(key) && key !== "id") {
+      //         modalWindow += `${key}:  ${userData[key]}\n`;
+      //       }
+      //     }
+      //     // Если мы нашли объект с нужным id, выходим из цикла
+      //     break;
+      //   }
+      // }
+
+      //
+      //
+
+      let modalWindow = "";
+      if (this.updatedUsersData.length == 0) {
+        alert("Вы ничего не изменили");
+      }
       for (let i = 0; i < this.updatedUsersData.length; i++) {
-        const obj = this.updatedUsersData[i];
+        console.log(
+          "проход по массиву будет только в случае существования хотя бы одного объекта"
+        );
+        console.log("this.updatedUsersData[i] is ");
+        console.log(this.updatedUsersData[i]);
+        const userData = this.updatedUsersData[i];
+        console.log(userData);
         // Проверяем, совпадает ли id объекта с id, который мы ищем
-        if (obj.id === id) {
-          for (let key in obj) {
-            if (obj.hasOwnProperty(key)) {
-              alert(key + ": " + obj[key]);
+        if (userData.id === id) {
+          for (let key in userData) {
+            if (
+              userData.hasOwnProperty(key) &&
+              key !== "id" &&
+              (userData[key] === "" || userData[key] === " ")
+            ) {
+              modalWindow += `${key}: Вы очистили это поле\n`;
+            } else if (userData.hasOwnProperty(key) && key !== "id") {
+              modalWindow += `${key}:  ${userData[key]}\n`;
             }
           }
           // Если мы нашли объект с нужным id, выходим из цикла
+          alert("Новые данные: \n" + modalWindow);
           break;
+        } else {
+          alert(
+            `Вы ничего не изменили у  пользователя ${this.users[id - 1].name}  `
+          );
+          //
         }
       }
-      //
-      // const foundUser = this.updatedUsersData.find(
-      //   (foundUser) => foundUser.id === id
-      // );
-      // console.log("foundUser is " + foundUser);
-      // //foundUser это тот объект с тайпами, который принадлежит этому аккордианТабу
-      // // console.log(this.updatedUsersData);
-      // let modalWindow = "";
-      // for (let key in foundUser) {
-      //   if (key !== "id") {
-      //     modalWindow += `${key}: ${foundUser[key]}\n`;
-      //   }
-      // }
-      // console.log("Такие данные были изменены:\n" + modalWindow);
-      //
-      // alert(updatesData);
-      //   /**
-      //   отображает в alert список измененных input'ов из массива updatesData
-      //   через цикл фор по длине массива
-      // alert(
-      //   "Надо сделать так, чтобы при нажатии на этот баттон, выводились изменения данного АккордионТаба"
-      // );
     },
   },
   created() {
@@ -165,7 +152,6 @@ export default {
         </div>
       </div>
       <Accordion :multiple="true">
-        <!-- первый аккордион -->
         <AccordionTab
           :expanded-icon="tabHeader.expandedIcon"
           :collapsed-icon="tabHeader.collapsedIcon"
@@ -186,7 +172,6 @@ export default {
           <div class="typesSave">
             <div class="table">
               <div class="row-up">
-                <!-- через тире такое задавать, внизу тоже -->
                 <div class="cell">ADDRESS</div>
                 <div class="cell">COMPANY</div>
                 <div class="cell">BASIC INFO</div>
@@ -199,22 +184,15 @@ export default {
                     <input
                       type="text"
                       v-model="user.address.street"
-                      @change="
-                        dataChanges(user.id, $event, 'user.address.street')
-                      "
+                      @change="dataChanges(user.id, $event, 'Street')"
                     />
-                    <!-- @input="changeINput(event)" -->
-                    <!-- @change="dataChanges()" -->
-                    <!-- прокинуть в тайп действующий тайп и значение -->
                   </div>
                   <div>
                     <div class="custom-label">Suite</div>
                     <input
                       type="text"
                       v-model="user.address.suite"
-                      @change="
-                        dataChanges(user.id, $event, 'user.address.suite')
-                      "
+                      @change="dataChanges(user.id, $event, 'Suite')"
                     />
                   </div>
                   <div>
@@ -222,52 +200,86 @@ export default {
                     <input
                       type="text"
                       v-model="user.address.city"
-                      @change="
-                        dataChanges(user.id, $event, 'user.address.city')
-                      "
+                      @change="dataChanges(user.id, $event, 'City')"
                     />
                   </div>
                   <div>
                     <div class="custom-label">Zipcode</div>
-                    <input type="text" v-model="user.address.zipcode" />
+                    <input
+                      type="text"
+                      v-model="user.address.zipcode"
+                      @change="dataChanges(user.id, $event, 'Zipcode')"
+                    />
                   </div>
                 </div>
 
                 <div class="second-cell cell-padding cell">
                   <div>
                     <div class="custom-label">Name</div>
-                    <input type="text" v-model="user.company.name" />
+                    <input
+                      type="text"
+                      v-model="user.company.name"
+                      @change="dataChanges(user.id, $event, 'Company name')"
+                    />
                   </div>
                   <div>
                     <div class="custom-label">CatchPhrase</div>
-                    <input type="text" v-model="user.company.catchPhrase" />
+                    <input
+                      type="text"
+                      v-model="user.company.catchPhrase"
+                      @change="dataChanges(user.id, $event, 'CatchPhrase')"
+                    />
                   </div>
                   <div>
                     <div class="custom-label">Bs</div>
-                    <input type="text" v-model="user.company.bs" />
+                    <input
+                      type="text"
+                      v-model="user.company.bs"
+                      @change="dataChanges(user.id, $event, 'Bs')"
+                    />
                   </div>
                 </div>
 
                 <div class="third-cell cell-padding cell">
                   <div>
                     <div class="custom-label">Name</div>
-                    <input type="text" v-model="user.name" />
+                    <input
+                      type="text"
+                      v-model="user.name"
+                      @change="dataChanges(user.id, $event, 'Name')"
+                    />
                   </div>
                   <div>
                     <div class="custom-label">Username</div>
-                    <input type="text" v-model="user.username" />
+                    <input
+                      type="text"
+                      v-model="user.username"
+                      @change="dataChanges(user.id, $event, 'Username')"
+                    />
                   </div>
                   <div>
                     <div class="custom-label">Email</div>
-                    <input type="text" v-model="user.email" />
+                    <input
+                      type="text"
+                      v-model="user.email"
+                      @change="dataChanges(user.id, $event, 'Email')"
+                    />
                   </div>
                   <div>
                     <div class="custom-label">Phone</div>
-                    <input type="text" v-model="user.phone" />
+                    <input
+                      type="text"
+                      v-model="user.phone"
+                      @change="dataChanges(user.id, $event, 'phone')"
+                    />
                   </div>
                   <div>
                     <div class="custom-label">Website</div>
-                    <input type="text" v-model="user.website" />
+                    <input
+                      type="text"
+                      v-model="user.website"
+                      @change="dataChanges(user.id, $event, 'website')"
+                    />
                   </div>
                 </div>
               </div>
