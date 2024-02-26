@@ -1,11 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-// import router from './router'
-// import store from './store'
-
 import Accordion from "primevue/accordion";
 import AccordionTab from "primevue/accordiontab";
-// import { PrimeIcons } from "primevue/api";
 import "primeicons/primeicons.css";
 const app = createApp(App);
 
